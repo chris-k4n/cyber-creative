@@ -2947,13 +2947,22 @@ ul {
 
 /* cursor css */
 /*! normalize.css v7.0.0 | MIT License | github.com/necolas/normalize.css */
+.cb-cursor,
+.cb-cursor *,
+.cb-cursor::before,
+.cb-cursor::after {
+  pointer-events: none !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+}
+
 .cb-cursor {
   position: fixed;
   top: 0;
   left: 0;
   z-index: 150;
   contain: layout style size;
-  pointer-events: none;
+  pointer-events: none !important;
   will-change: transform;
   transition: opacity 0.3s, color 0.4s;
 }

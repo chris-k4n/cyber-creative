@@ -206,13 +206,22 @@ h6 {
 /* ==========================================================================
    MAGIC CURSOR STYLES (from template _cursor.scss)
    ========================================================================== */
+.cb-cursor,
+.cb-cursor *,
+.cb-cursor::before,
+.cb-cursor::after {
+  pointer-events: none !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+}
+
 .cb-cursor {
   position: fixed;
   top: 0;
   left: 0;
   z-index: 99999;
   contain: layout style size;
-  pointer-events: none;
+  pointer-events: none !important;
   will-change: transform;
   transition: opacity 0.3s, color 0.4s;
 }
@@ -228,6 +237,7 @@ h6 {
   border-radius: 500px;
   transform: scale(0);
   transition: opacity 0.1s, transform 0.3s ease-in-out;
+  pointer-events: none !important;
 }
 
 .cb-cursor-text {
@@ -418,4 +428,171 @@ h6 {
 .anim-text .char {
   display: inline-block;
   will-change: transform, opacity;
+}
+
+/* ==========================================================================
+   TESTIMONIAL MARQUEE & AUTO-SLIDER STYLES
+   ========================================================================== */
+.running-text.testi {
+  background-color: transparent;
+  padding: 10px 0;
+  margin-bottom: 25px;
+  position: relative;
+  z-index: 1;
+}
+
+.running-text.testi ul {
+  gap: 30px !important;
+}
+
+.running-text.testi ul li {
+  font-size: 80px !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+@media only screen and (max-width: 992px) {
+  .running-text.testi ul li {
+    font-size: 52px !important;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .running-text.testi ul li {
+    font-size: 34px !important;
+  }
+}
+
+/* Client Feedback Cards Auto Slider */
+.client-slider-wrapper {
+  position: relative;
+  width: 100vw;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  overflow: hidden;
+  padding: 85px 0 25px 0;
+}
+
+.client-slider-track {
+  display: flex;
+  gap: 24px;
+  will-change: transform;
+  align-items: stretch;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.client-feedback-card {
+  flex: 0 0 360px;
+  width: 360px;
+  background-color: var(--rr-color-bg-1, #0c101a);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 14px;
+  padding: 85px 30px 35px 30px;
+  position: relative;
+  text-align: center;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.45);
+  transition: transform 0.3s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+  cursor: grab;
+}
+
+.client-feedback-card:active {
+  cursor: grabbing;
+}
+
+.client-feedback-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(63, 90, 243, 0.35);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6);
+}
+
+.client-feedback-thumb {
+  width: 135px;
+  height: 135px;
+  border-radius: 50%;
+  position: absolute;
+  top: -68px;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 8px solid #02050A;
+  background-color: #0c101a;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  transition: border-color 0.3s ease;
+}
+
+.client-feedback-thumb img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
+.client-feedback-card .author-name {
+  font-size: 22px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 6px;
+  letter-spacing: -0.01em;
+}
+
+.client-feedback-card .author-role {
+  color: var(--rr-color-theme-primary, #3F5AF3);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.client-feedback-card .author-quote {
+  color: #9DA3B0;
+  font-size: 15px;
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* Light Theme overrides for Testimonials */
+[data-theme="light"] .running-text.testi ul li {
+  color: #111827 !important;
+}
+
+[data-theme="light"] .client-feedback-card {
+  background-color: #ffffff !important;
+  border-color: #E2E8F0 !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06) !important;
+}
+
+[data-theme="light"] .client-feedback-card .author-name {
+  color: #111827 !important;
+}
+
+[data-theme="light"] .client-feedback-card .author-quote {
+  color: #4B5563 !important;
+}
+
+[data-theme="light"] .client-feedback-thumb {
+  border-color: #F8F9FC !important;
+  background-color: #ffffff !important;
+}
+
+@media (max-width: 767px) {
+  .client-feedback-card {
+    flex: 0 0 290px;
+    width: 290px;
+    padding: 75px 20px 30px 20px;
+  }
+  .client-feedback-thumb {
+    width: 115px;
+    height: 115px;
+    top: -58px;
+  }
 }

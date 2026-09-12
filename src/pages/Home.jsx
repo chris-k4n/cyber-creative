@@ -1,25 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 
 const TESTIMONIALS = [
-  {
-    author: 'Daniel Joseph',
-    role: 'Writer',
-    avatar: '/assets/img/testi/testi-author-1.png',
-    quote: 'Curabitur accumsan nec aliquam mauris placat primis lacinia egestas congue facilisis ligula leo sociosqu consequat.'
-  },
-  {
-    author: 'Victoria Madison',
-    role: 'Developer',
-    avatar: '/assets/img/testi/testi-author-2.png',
-    quote: 'Curabitur accumsan nec aliquam mauris placat primis lacinia egestas congue facilisis ligula leo sociosqu consequat.'
-  },
-  {
-    author: 'Nicholas Thomas',
-    role: 'Designer',
-    avatar: '/assets/img/testi/testi-author-3.png',
-    quote: 'Curabitur accumsan nec aliquam mauris placat primis lacinia egestas congue facilisis ligula leo sociosqu consequat.'
-  },
   {
     author: 'James Hallagher',
     role: 'Marketer',
@@ -30,6 +12,24 @@ const TESTIMONIALS = [
     author: 'Amelia Harper',
     role: 'Owner',
     avatar: '/assets/img/testi/testi-author-6.png',
+    quote: 'Curabitur accumsan nec aliquam mauris placat primis lacinia egestas congue facilisis ligula leo sociosqu consequat.'
+  },
+  {
+    author: 'Victoria Madison',
+    role: 'Writer',
+    avatar: '/assets/img/testi/testi-author-2.png',
+    quote: 'Curabitur accumsan nec aliquam mauris placat primis lacinia egestas congue facilisis ligula leo sociosqu consequat.'
+  },
+  {
+    author: 'Daniel Joseph',
+    role: 'Writer',
+    avatar: '/assets/img/testi/testi-author-1.png',
+    quote: 'Curabitur accumsan nec aliquam mauris placat primis lacinia egestas congue facilisis ligula leo sociosqu consequat.'
+  },
+  {
+    author: 'Victoria Morris',
+    role: 'Developer',
+    avatar: '/assets/img/testi/testi-author-3.png',
     quote: 'Curabitur accumsan nec aliquam mauris placat primis lacinia egestas congue facilisis ligula leo sociosqu consequat.'
   }
 ];
@@ -69,10 +69,199 @@ const PROJECTS_ACCORDION = [
   }
 ];
 
+function ClientFeedbackSlider() {
+  const totalItems = TESTIMONIALS.length;
+  // Start centered on Victoria Madison (totalItems + 2 = index 7)
+  const [slideIndex, setSlideIndex] = useState(totalItems + 2);
+  const [isTransitioning, setIsTransitioning] = useState(true);
+  const [isPaused, setIsPaused] = useState(false);
+  const [cardWidth, setCardWidth] = useState(360);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragOffset, setDragOffset] = useState(0);
+  const dragStartXRef = useRef(0);
+  const gap = 24;
+
+  useEffect(() => {
+    const handleResize = () => {
+      setCardWidth(window.innerWidth < 768 ? 290 : 360);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Auto-play: continuously advances smoothly on its own
+  useEffect(() => {
+    if (isPaused || isDragging) return;
+    const interval = setInterval(() => {
+      setIsTransitioning(true);
+      setSlideIndex((prev) => prev + 1);
+    }, 3400);
+
+    return () => clearInterval(interval);
+  }, [isPaused, isDragging]);
+
+  // Seamless loop reset when transition finishes
+  const handleTransitionEnd = () => {
+    if (slideIndex >= totalItems * 2) {
+      setIsTransitioning(false);
+      setSlideIndex(slideIndex - totalItems);
+    } else if (slideIndex < totalItems) {
+      setIsTransitioning(false);
+      setSlideIndex(slideIndex + totalItems);
+    }
+  };
+
+  // Re-enable smooth transition after silent teleport
+  useEffect(() => {
+    if (!isTransitioning) {
+      const raf = requestAnimationFrame(() => {
+        setIsTransitioning(true);
+      });
+      return () => cancelAnimationFrame(raf);
+    }
+  }, [isTransitioning]);
+
+  // Mouse & Touch Drag interactions
+  const handleMouseDown = (e) => {
+    if (e.button !== 0) return;
+    setIsDragging(true);
+    setIsTransitioning(false);
+    dragStartXRef.current = e.clientX;
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDragging) return;
+    setDragOffset(e.clientX - dragStartXRef.current);
+  };
+
+  const handleMouseUp = () => {
+    if (!isDragging) return;
+    setIsDragging(false);
+    setIsTransitioning(true);
+    if (dragOffset < -60) {
+      setSlideIndex((prev) => prev + 1);
+    } else if (dragOffset > 60) {
+      setSlideIndex((prev) => prev - 1);
+    }
+    setDragOffset(0);
+  };
+
+  const handleTouchStart = (e) => {
+    setIsDragging(true);
+    setIsTransitioning(false);
+    dragStartXRef.current = e.touches[0].clientX;
+  };
+
+  const handleTouchMove = (e) => {
+    if (!isDragging) return;
+    setDragOffset(e.touches[0].clientX - dragStartXRef.current);
+  };
+
+  const handleTouchEnd = () => {
+    if (!isDragging) return;
+    setIsDragging(false);
+    setIsTransitioning(true);
+    if (dragOffset < -50) {
+      setSlideIndex((prev) => prev + 1);
+    } else if (dragOffset > 50) {
+      setSlideIndex((prev) => prev - 1);
+    }
+    setDragOffset(0);
+  };
+
+  const step = cardWidth + gap;
+  const currentCenterOffset = slideIndex * step + cardWidth / 2 - dragOffset;
+  const activeDotIndex = ((slideIndex % totalItems) + totalItems) % totalItems;
+  const allSlides = [...TESTIMONIALS, ...TESTIMONIALS, ...TESTIMONIALS];
+
+  return (
+    <div
+      className="client-slider-wrapper"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => {
+        setIsPaused(false);
+        handleMouseUp();
+      }}
+      onMouseDown={handleMouseDown}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+      style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
+    >
+      <div
+        className="client-slider-track"
+        onTransitionEnd={handleTransitionEnd}
+        style={{
+          transform: `translateX(calc(50vw - ${currentCenterOffset}px))`,
+          transition: isTransitioning
+            ? 'transform 0.8s cubic-bezier(0.25, 1, 0.5, 1)'
+            : 'none',
+          gap: `${gap}px`
+        }}
+      >
+        {allSlides.map((item, idx) => (
+          <div
+            key={idx}
+            className="client-feedback-card"
+            style={{ width: `${cardWidth}px`, flex: `0 0 ${cardWidth}px` }}
+          >
+            <div className="client-feedback-thumb">
+              <img src={item.avatar} alt={item.author} draggable={false} />
+            </div>
+            <h4 className="author-name">{item.author}</h4>
+            <span className="author-role">{item.role}</span>
+            <p className="author-quote">"{item.quote}"</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Pagination bullets */}
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: '8px',
+          marginTop: '45px'
+        }}
+      >
+        {TESTIMONIALS.map((_, i) => {
+          const isActive = activeDotIndex === i;
+          return (
+            <button
+              key={i}
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsTransitioning(true);
+                setSlideIndex(totalItems + i);
+              }}
+              style={{
+                width: isActive ? '28px' : '8px',
+                height: '8px',
+                borderRadius: '4px',
+                backgroundColor: isActive
+                  ? 'var(--cc-primary)'
+                  : 'rgba(255, 255, 255, 0.22)',
+                border: 'none',
+                padding: 0,
+                cursor: 'pointer',
+                transition: 'all 0.35s cubic-bezier(0.165, 0.84, 0.44, 1)'
+              }}
+              aria-label={`Go to testimonial ${i + 1}`}
+            />
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 export default function Home() {
   const [activeFaq, setActiveFaq] = useState('collapseFour');
   const [activeProject, setActiveProject] = useState('collapseOne');
-  const [activeTestiIndex, setActiveTestiIndex] = useState(0);
 
   return (
     <div className="home-wrapper">
@@ -266,7 +455,7 @@ export default function Home() {
                   <img src="/assets/img/service/service-2.jpg" alt="service" />
                   <div className="service-icon">
                     <svg width="50" height="50" viewBox="0 0 50 50" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M50.3639 36.3801L45.2404 33.8184L41.9797 25.3365C41.9413 25.2363 41.8826 25.145 41.8074 25.0684C41.7321 24.9918 41.6419 24.9315 41.5423 24.8914L21.3101 16.8039C21.1686 16.7476 21.0138 16.7339 20.8646 16.7644C20.7155 16.7949 20.5785 16.8684 20.4705 16.9758L17.7721 19.6742C17.6661 19.7822 17.5939 19.9187 17.5641 20.0671C17.5343 20.2155 17.5482 20.3693 17.6042 20.5099L25.6916 40.7421C25.7317 40.8417 25.792 40.9319 25.8686 41.0072C25.9452 41.0824 26.0365 41.1411 26.1368 41.1794L34.6186 44.4402L37.1803 49.5636C37.2343 49.6766 37.3146 49.775 37.4145 49.8504C37.5144 49.9258 37.6309 49.9761 37.7544 49.9971C37.7959 50.001 37.8378 50.001 37.8793 49.9971C38.0861 49.9962 38.2841 49.9134 38.4299 49.7667L50.5669 37.6297C50.6563 37.5435 50.7237 37.4373 50.7638 37.3198C50.8039 37.2023 50.8154 37.077 50.7973 36.9541C50.7764 36.8307 50.726 36.7142 50.6506 36.6143C50.5752 36.5144 50.4768 36.434 50.3639 36.3801Z" fill="currentColor"/>
+                      <path d="M50.3639 36.3801L45.2404 33.8184L41.9797 25.3365C41.9413 25.2363 41.8826 25.145 41.8074 25.0684C41.7321 24.9918 41.6419 24.9315 41.5423 24.8914L21.3101 16.8039C21.1686 16.7476 21.0138 16.7339 20.8646 16.7644C20.7155 16.7949 20.5785 16.8684 20.4705 16.9758L17.7721 19.6742C17.6661 19.7822 17.5939 19.9187 17.5641 20.0671C17.5343 20.2155 17.5482 20.3693 17.6042 20.5099L25.6916 40.7421C25.7317 40.8417 25.792 40.9319 25.8686 41.0072C25.9452 41.0824 26.0365 41.1411 26.1368 41.1794L34.6186 44.4402L37.1803 49.5636C37.2343 49.6766 37.3146 49.775 37.4145 49.8504C37.5144 49.9258 37.6309 49.9761 37.7544 49.9971C37.7959 50.001 37.8378 50.001 37.8793 49.9971C38.0861 49.9962 38.2841 49.9134 38.4299 49.7667L50.5669 37.6297C50.6563 37.5435 50.7237 37.4373 50.7638 37.3198C50.8039 37.2023 50.8154 37.077 50.7973 36.9541C50.7764 36.8307 50.726 36.7142 50.6506 36.6143C50.5752 36.5144 50.4768 36.434 50.3639 36.3801Z" fill="currentColor" />
                     </svg>
                   </div>
                   <Link to="/services" className="service-btn">
@@ -290,7 +479,7 @@ export default function Home() {
                   <img src="/assets/img/service/service-1.jpg" alt="service" />
                   <div className="service-icon">
                     <svg width="51" height="50" viewBox="0 0 51 50" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M9.96582 0C8.59527 0 7.46745 1.12782 7.46745 2.4984V29.1651C7.46745 30.2773 9.13574 30.2773 9.13574 29.1651V8.33663H42.4642V29.1651C42.439 30.3014 44.1564 30.3014 44.1308 29.1651V2.4984C44.1308 1.12782 43.0047 0 41.6341 0H9.96582Z" fill="currentColor"/>
+                      <path d="M9.96582 0C8.59527 0 7.46745 1.12782 7.46745 2.4984V29.1651C7.46745 30.2773 9.13574 30.2773 9.13574 29.1651V8.33663H42.4642V29.1651C42.439 30.3014 44.1564 30.3014 44.1308 29.1651V2.4984C44.1308 1.12782 43.0047 0 41.6341 0H9.96582Z" fill="currentColor" />
                     </svg>
                   </div>
                   <Link to="/services" className="service-btn">
@@ -314,7 +503,7 @@ export default function Home() {
                   <img src="/assets/img/service/service-3.jpg" alt="service" />
                   <div className="service-icon">
                     <svg width="50" height="50" viewBox="0 0 50 50" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M23.0491 13.9814C22.483 12.8947 22.5755 11.6017 23.2903 10.6067C23.5142 10.2953 23.9481 10.2242 24.2596 10.4479C24.5711 10.6717 24.6422 11.1057 24.4184 11.4172C24.0113 11.984 23.9586 12.7206 24.281 13.3396C24.5998 13.9516 25.223 14.3291 25.9115 14.3291Z" fill="currentColor"/>
+                      <path d="M23.0491 13.9814C22.483 12.8947 22.5755 11.6017 23.2903 10.6067C23.5142 10.2953 23.9481 10.2242 24.2596 10.4479C24.5711 10.6717 24.6422 11.1057 24.4184 11.4172C24.0113 11.984 23.9586 12.7206 24.281 13.3396C24.5998 13.9516 25.223 14.3291 25.9115 14.3291Z" fill="currentColor" />
                     </svg>
                   </div>
                   <Link to="/services" className="service-btn">
@@ -338,7 +527,7 @@ export default function Home() {
                   <img src="/assets/img/service/service-4.jpg" alt="service" />
                   <div className="service-icon">
                     <svg width="51" height="50" viewBox="0 0 51 50" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M41.3442 15.5832L36.0374 10.2764C35.9281 10.1661 35.7901 10.0886 35.6391 10.0525C35.4881 10.0163 35.33 10.023 35.1826 10.0719C35.0353 10.1207 34.9044 10.2096 34.8048 10.3288C34.7052 10.4479 34.6408 10.5924 34.6189 10.7462Z" fill="currentColor"/>
+                      <path d="M41.3442 15.5832L36.0374 10.2764C35.9281 10.1661 35.7901 10.0886 35.6391 10.0525C35.4881 10.0163 35.33 10.023 35.1826 10.0719C35.0353 10.1207 34.9044 10.2096 34.8048 10.3288C34.7052 10.4479 34.6408 10.5924 34.6189 10.7462Z" fill="currentColor" />
                     </svg>
                   </div>
                   <Link to="/services" className="service-btn">
@@ -433,64 +622,52 @@ export default function Home() {
       </section>
 
       {/* 6. RUNNING TEXT TESTIMONIAL TICKER */}
-      <div className="running-text testi">
+      <div
+        className="running-text testi"
+        style={{
+          position: 'relative',
+          zIndex: 1,
+          marginBottom: '20px',
+          overflow: 'hidden'
+        }}
+      >
         <div className="carouselTicker carouselTicker-nav" data-speed="fast" style={{ overflow: 'hidden' }}>
-          <ul className="text-anim carouselTicker__list" style={{ display: 'flex', width: 'max-content', animation: 'marqueeScroll 20s linear infinite' }}>
-            <li>Customer Testimonial .</li>
-            <li>Client Feedbacks</li>
-            <li>Customer Testimonial .</li>
-            <li>Client Feedbacks</li>
-            <li>Customer Testimonial .</li>
-            <li>Client Feedbacks</li>
-            <li>Customer Testimonial .</li>
-            <li>Client Feedbacks</li>
+          <ul
+            className="text-anim carouselTicker__list"
+            style={{
+              display: 'flex',
+              width: 'max-content',
+              animation: 'marqueeScroll 25s linear infinite',
+              alignItems: 'center',
+              margin: 0,
+              padding: 0
+            }}
+            draggable={false}
+            onDragStart={(e) => e.preventDefault()}
+          >
+            <li>CUSTOMER TESTIMONIAL .</li>
+            <li>CLIENT FEEDBACKS .</li>
+            <li>CUSTOMER TESTIMONIAL .</li>
+            <li>CLIENT FEEDBACKS .</li>
+            <li>CUSTOMER TESTIMONIAL .</li>
+            <li>CLIENT FEEDBACKS .</li>
+            <li>CUSTOMER TESTIMONIAL .</li>
+            <li>CLIENT FEEDBACKS .</li>
           </ul>
         </div>
       </div>
 
-      {/* 7. TESTIMONIAL SECTION */}
-      <section className="testimonial-section overflow-hidden">
-        <div className="container">
-          <div className="testi-carousel" style={{ position: 'relative', padding: '40px 0' }}>
-            <div className="testi-item text-center" style={{ maxWidth: '800px', margin: '0 auto' }}>
-              <div className="testi-thumb" style={{ marginBottom: '24px' }}>
-                <img 
-                  src={TESTIMONIALS[activeTestiIndex].avatar} 
-                  alt={TESTIMONIALS[activeTestiIndex].author}
-                  style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', margin: '0 auto', display: 'inline-block' }}
-                />
-              </div>
-              <div className="testi-content">
-                <h3 className="author">
-                  {TESTIMONIALS[activeTestiIndex].author} <span>{TESTIMONIALS[activeTestiIndex].role}</span>
-                </h3>
-                <p style={{ fontSize: '20px', lineHeight: '1.7', marginTop: '16px' }}>
-                  "{TESTIMONIALS[activeTestiIndex].quote}"
-                </p>
-              </div>
-            </div>
-
-            {/* Pagination Dots */}
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', marginTop: '30px' }}>
-              {TESTIMONIALS.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => setActiveTestiIndex(i)}
-                  style={{
-                    width: activeTestiIndex === i ? '24px' : '10px',
-                    height: '10px',
-                    borderRadius: '5px',
-                    backgroundColor: activeTestiIndex === i ? 'var(--rr-color-theme-primary)' : 'rgba(255,255,255,0.2)',
-                    border: 'none',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s ease'
-                  }}
-                  aria-label={`Go to slide ${i + 1}`}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
+      {/* 7. CLIENT FEEDBACKS AUTO-SLIDER SECTION */}
+      <section
+        className="testimonial-section overflow-hidden"
+        style={{
+          position: 'relative',
+          zIndex: 2,
+          paddingTop: '20px',
+          paddingBottom: '80px'
+        }}
+      >
+        <ClientFeedbackSlider />
       </section>
 
       {/* 8. PROJECT GALLERY ACCORDION SECTION */}
