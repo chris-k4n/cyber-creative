@@ -1,0 +1,18 @@
+<svg width="64" height="64" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="cc-emblem-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3F5AF3" />
+      <stop offset="65%" stop-color="#3F5AF3" />
+      <stop offset="100%" stop-color="#687df8" />
+    </linearGradient>
+    <linearGradient id="cc-emblem-accent" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#3F5AF3" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.9" />
+    </linearGradient>
+  </defs>
+  <rect width="44" height="44" rx="10" fill="#02050A" />
+  <path d="M22 3.5 L38.5 12 V32 L22 40.5 L5.5 32 V12 Z" stroke="#3F5AF3" stroke-width="1.5" stroke-opacity="0.4" fill="none" />
+  <path d="M33 14.5 L22 8 L11 14.5 V29.5 L22 36 L33 29.5 L28.5 26.5 L22 30.5 L15.5 26.5 V17.5 L22 13.5 L28.5 17.5 Z" fill="url(#cc-emblem-grad)" />
+  <path d="M22 17 L27.5 22 L22 27 L16.5 22 Z" fill="url(#cc-emblem-accent)" />
+  <circle cx="22" cy="22" r="2" fill="#ffffff" />
+</svg>

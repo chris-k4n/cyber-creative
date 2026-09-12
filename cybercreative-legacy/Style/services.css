@@ -1,0 +1,155 @@
+    #scrollProgress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 2px;
+      width: 0;
+      background: var(--gold);
+      z-index: 9999;
+      transition: width 0.1s linear;
+    }
+
+    /* ── iframe panel replaces .arc-panel-wrap ── */
+    .arc-services-section {
+      overflow: hidden;
+      min-height: auto;
+      padding: 4rem 4rem 4rem 2rem;
+    }
+
+    .arc-services-section .arc-container {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      align-items: center;
+      gap: 10rem;
+      min-height: auto;
+      overflow: visible;
+    }
+
+    .arc-wheel-wrap {
+      flex-shrink: 0;
+      position: relative;
+      z-index: 2;
+      overflow: visible;
+      justify-self: start;
+    }
+
+    .arc-connector {
+      display: none;
+    }
+
+    .arc-panel-frame {
+      width: 100%;
+      border: none;
+      background: #141414;
+      height: 580px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      opacity: 0;
+      transform: translateX(24px);
+      transition: opacity 0.35s ease, transform 0.35s ease;
+      position: relative;
+      z-index: 1;
+    }
+
+    .arc-panel-frame.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* ── Mobile tab selector (hidden on desktop) ── */
+    .service-tabs {
+      display: none;
+    }
+
+    /* ── Responsive: arc section ── */
+    @media (max-width: 1100px) {
+      .arc-services-section .arc-container {
+        gap: 4rem;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .arc-services-section {
+        padding: 2rem 5vw 3rem;
+      }
+
+      .arc-services-section .arc-container {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1.25rem;
+        overflow: visible;
+      }
+
+      /* Hide the circular wheel on mobile, use tab pills instead */
+      .arc-wheel-wrap {
+        display: none;
+      }
+
+      .service-tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        justify-content: center;
+      }
+
+      .service-tab {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        font-family: var(--font-mono);
+        font-size: 0.7rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--dim);
+        background: var(--charcoal, #1a1a1a);
+        border: 1px solid var(--mid);
+        padding: 0.6rem 1rem;
+        border-radius: 999px;
+        cursor: pointer;
+        transition: color 0.2s, border-color 0.2s, background 0.2s;
+      }
+
+      .service-tab i {
+        color: var(--gold);
+        font-size: 0.85rem;
+      }
+
+      .service-tab.active,
+      .service-tab:hover {
+        color: var(--black);
+        background: var(--gold);
+        border-color: var(--gold);
+      }
+
+      .service-tab.active i,
+      .service-tab:hover i {
+        color: var(--black);
+      }
+
+      .arc-panel-frame {
+        height: 820px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .service-tab {
+        font-size: 0.62rem;
+        padding: 0.5rem 0.8rem;
+      }
+
+      .arc-panel-frame {
+        border-radius: 12px;
+      }
+    }
+
+    body {
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+
+    html {
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+  

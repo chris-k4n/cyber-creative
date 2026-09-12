@@ -1,0 +1,389 @@
+/* =============================================
+   CYBER CREATIVE — client.css
+   Perfectly matched to style-improved.css system
+   Palette: --black / --charcoal / --mid / --gold
+   ============================================= */
+
+/* ── SECTION WRAPPER ─────────────────────────── */
+.logos-section {
+  background: var(--black);
+  padding: 7rem 4vw 9rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.logos-section::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 10%; right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent, rgba(232, 200, 74, 0.25), transparent);
+}
+
+/* Ambient radial glow — matches page-banner::before pattern */
+.logos-section::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(ellipse at 50% 20%,
+    rgba(232, 200, 74, 0.05) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.wrap {
+  max-width: 1320px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── SECTION HEADER ─────────────────────────── */
+.sec-header {
+  margin-bottom: 4rem;
+}
+
+.sec-header.centered {
+  text-align: center;
+}
+
+/* Matches .section-label pattern from style-improved */
+.sec-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  color: var(--gold);
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 1.2rem;
+}
+
+/* Matches .sec-heading from other pages */
+.sec-heading {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  line-height: 1;
+  color: var(--white);
+  letter-spacing: 0.02em;
+  margin-bottom: 1rem;
+}
+
+/* em → gold, matching global em rule */
+.sec-heading em {
+  font-style: normal;
+  color: var(--gold);
+}
+
+.sec-sub {
+  font-size: 0.88rem;
+  color: var(--muted);
+  max-width: 480px;
+  margin: 0 auto;
+  line-height: 1.75;
+}
+
+/* ── STATS STRIP ─────────────────────────────── */
+/* Matches ticker-wrap border + charcoal bg pattern */
+.client-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border: 1px solid var(--mid);
+  border-radius: 2px;              /* site uses 2px on most components */
+  overflow: hidden;
+  margin-bottom: 5rem;
+}
+
+.client-stat {
+  padding: 2.8rem 2rem;
+  text-align: center;
+  background: var(--charcoal);
+  position: relative;
+  transition: background var(--transition-base);
+}
+
+.client-stat:not(:last-child) {
+  border-right: 1px solid var(--mid);
+}
+
+.client-stat::before {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--gold), var(--gold-bright));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--transition-base);
+}
+
+.client-stat:hover {
+  background: var(--dark);
+}
+
+.client-stat:hover::before {
+  transform: scaleX(1);
+}
+
+.stat-num {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 5vw, 5rem);
+  line-height: 1;
+  color: var(--white);
+  display: block;
+  margin-bottom: 0.5rem;
+  transition: color var(--transition-base);
+  letter-spacing: 0.02em;
+}
+
+.client-stat:hover .stat-num {
+  color: var(--gold);
+}
+
+.stat-label {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ── LOGO GRID ───────────────────────────────── */
+/* Open floating layout — no boxes, no borders, logos breathe freely */
+.logos-free-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 3rem 4.5rem;
+  background: transparent;
+  border: none;
+  padding: 1rem 0 2rem;
+}
+
+/* ── LOGO ITEM ───────────────────────────────── */
+.logo-free-item {
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  min-height: unset;
+  position: relative;
+  transition: transform var(--transition-base);
+  overflow: visible;
+}
+
+.logo-free-item::before,
+.logo-free-item::after {
+  display: none;
+}
+
+.logo-free-item:hover {
+  background: transparent;
+  transform: translateY(-3px);
+}
+
+/* Logos: dimmed at rest, bright on hover */
+.logo-free-item img {
+  max-width: 160px;
+  max-height: 68px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+
+  transition:
+    filter var(--transition-slow),
+    transform var(--transition-base);
+  display: block;
+}
+
+.logo-free-item:hover img {
+  filter: brightness(1.05);
+  transform: scale(1.08);
+}
+
+/* Dark logos inverted */
+.logo-free-item.dark-invert img {
+  filter: invert(1);
+}
+
+.logo-free-item.dark-invert:hover img {
+  filter: invert(1) brightness(1.1);
+}
+
+/* Fallback text (onerror) */
+.logo-name {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--dim);
+  text-align: center;
+  line-height: 1.4;
+  transition: color var(--transition-base);
+}
+
+.logo-free-item:hover .logo-name {
+  color: var(--gold);
+}
+
+/* ── CLIENT CTA STRIP ────────────────────────── */
+/* Matches style of portfolio / connect page CTAs */
+.client-cta-strip {
+  margin-top: 6rem;
+  border: 1px solid var(--mid);
+  border-radius: 2px;
+  padding: 4rem 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2.5rem;
+  background: var(--charcoal);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Matches page-banner::before radial glow */
+.client-cta-strip::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 80% 50%,
+    rgba(232, 200, 74, 0.07) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+/* Gold top-border line — matches page hero dividers */
+.client-cta-strip::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent, rgba(232, 200, 74, 0.5), transparent);
+}
+
+.cta-strip-text {
+  position: relative; z-index: 1;
+}
+
+.cta-strip-text h3 {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  color: var(--white);
+  margin-bottom: 0.4rem;
+  line-height: 1.05;
+  letter-spacing: 0.01em;
+}
+
+.cta-strip-text h3 em {
+  font-style: normal;
+  color: var(--gold);
+}
+
+.cta-strip-text p {
+  font-size: 0.86rem;
+  color: var(--muted);
+  margin: 0;
+  line-height: 1.65;
+}
+
+.cta-strip-action {
+  position: relative; z-index: 1;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* ── RESPONSIVE ──────────────────────────────── */
+@media (max-width: 860px) {
+  .logos-section {
+    padding: 5rem 5vw 6rem;
+  }
+
+  .sec-header {
+    margin-bottom: 3rem;
+  }
+
+  .logos-free-grid {
+    gap: 2rem 2.5rem;
+  }
+
+  .logo-free-item img {
+    max-width: 110px;
+    max-height: 50px;
+  }
+
+  .client-stats {
+    grid-template-columns: 1fr;
+    margin-bottom: 3.5rem;
+  }
+
+  .client-stat {
+    padding: 2.2rem 2rem;
+  }
+
+  .client-stat:not(:last-child) {
+    border-right: none;
+    border-bottom: 1px solid var(--mid);
+  }
+
+  .client-cta-strip {
+    margin-top: 4rem;
+    flex-direction: column;
+    padding: 2.5rem 2rem;
+    text-align: center;
+  }
+
+  .cta-strip-action {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .cta-strip-action .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .logos-section {
+    padding: 4rem 6vw 5rem;
+  }
+
+  .sec-header {
+    margin-bottom: 2.5rem;
+  }
+
+  .sec-sub {
+    max-width: 100%;
+  }
+
+  .logos-free-grid {
+    gap: 1.5rem 2rem;
+  }
+
+  .logo-free-item img {
+    max-width: 90px;
+    max-height: 40px;
+  }
+
+  .client-stats {
+    margin-bottom: 2.5rem;
+  }
+
+  .client-stat {
+    padding: 1.8rem 1.5rem;
+  }
+
+  .client-cta-strip {
+    margin-top: 3rem;
+    padding: 2rem 1.5rem;
+  }
+
+  .cta-strip-text h3 {
+    font-size: clamp(1.6rem, 7vw, 2.2rem);
+  }
+}

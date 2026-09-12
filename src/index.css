@@ -1,0 +1,421 @@
+/* ==========================================================================
+   CyberCreative Global Styles & Theme Configuration
+   ========================================================================== */
+
+:root {
+  /* ========================================================================
+     THEME ACCENT COLOR CONFIGURATION:
+     To change the entire website's theme color (buttons, borders, glows, logo,
+     links, hovers, scrollbars, and SVG highlights), simply edit --cc-primary below!
+     ======================================================================== */
+  --cc-primary: #3F5AF3;
+
+  /* Derived dynamic theme colors */
+  --cc-primary-glow: color-mix(in srgb, var(--cc-primary) 35%, transparent);
+  --cc-primary-light: color-mix(in srgb, var(--cc-primary) 12%, transparent);
+  --cc-primary-hover: color-mix(in srgb, var(--cc-primary) 85%, black);
+
+  /* Synced template color tokens */
+  --rr-color-theme-primary: var(--cc-primary);
+  --accent: var(--cc-primary);
+  --accent-bg: var(--cc-primary-light);
+  --accent-border: var(--cc-primary);
+
+  /* Surfaces & typography */
+  --cc-dark-bg: #02050A;
+  --cc-dark-surface: #0c101a;
+  --cc-border: #1a2233;
+  --cc-text-muted: #9DA3B0;
+  --cc-logo-text: #ffffff;
+}
+
+[data-theme="light"] {
+  --cc-logo-text: #111827;
+  --cc-primary-glow: color-mix(in srgb, var(--cc-primary) 18%, transparent);
+  --cc-primary-light: color-mix(in srgb, var(--cc-primary) 10%, transparent);
+}
+
+/* Base body styles */
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #02050A;
+  color: #B0B2B7;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Smooth Scrolling Container */
+#smooth-wrapper {
+  overflow: hidden;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+#smooth-content {
+  overflow: visible;
+  width: 100%;
+}
+
+/* Headings */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+}
+
+/* Text animation line/word wrappers */
+.line,
+.word,
+.char {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+/* Primary Button Styling Matching Template */
+.rr-primary-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background-color: var(--cc-primary);
+  color: #ffffff !important;
+  font-weight: 700;
+  border-radius: 6px;
+  border: none;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+  box-shadow: 0 4px 15px var(--cc-primary-glow);
+  cursor: pointer;
+}
+
+.rr-primary-btn:hover {
+  background-color: var(--cc-primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px var(--cc-primary-glow);
+  color: #ffffff !important;
+}
+
+/* Active navigation link indicator */
+.active-header-link {
+  color: var(--cc-primary) !important;
+}
+
+.active-header-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--cc-primary);
+  border-radius: 2px;
+}
+
+/* Portfolio Card Hover Effects */
+.cs-item {
+  transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), border-color 0.3s ease, box-shadow 0.4s ease;
+}
+
+.cs-item:hover {
+  transform: translateY(-8px);
+  border-color: var(--cc-primary) !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+}
+
+.cs-item:hover .portfolio-thumb-img {
+  transform: scale(1.07);
+}
+
+.cs-item:hover .cs-btn {
+  transform: scale(1.1) rotate(45deg);
+  background-color: #ffffff !important;
+  color: var(--cc-primary) !important;
+}
+
+/* Service Card Hover Effects */
+.service-box {
+  transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), border-color 0.3s ease, box-shadow 0.4s ease;
+}
+
+.service-box:hover {
+  transform: translateY(-8px);
+  border-color: var(--cc-primary) !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* Job Card Hover Effects */
+.job-card {
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.job-card:hover {
+  border-color: var(--cc-primary) !important;
+  transform: translateX(6px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+/* Marquee infinite scroll keyframes */
+@keyframes marqueeScroll {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Logo toggles based on theme */
+.logo-dark {
+  display: none !important;
+}
+
+.logo-light {
+  display: block !important;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #06090f;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #202838;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--cc-primary);
+}
+
+/* ==========================================================================
+   MAGIC CURSOR STYLES (from template _cursor.scss)
+   ========================================================================== */
+.cb-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 99999;
+  contain: layout style size;
+  pointer-events: none;
+  will-change: transform;
+  transition: opacity 0.3s, color 0.4s;
+}
+
+.cb-cursor:before {
+  content: "";
+  position: absolute;
+  top: -24px;
+  left: -24px;
+  width: 48px;
+  height: 48px;
+  background: transparent;
+  border-radius: 500px;
+  transform: scale(0);
+  transition: opacity 0.1s, transform 0.3s ease-in-out;
+}
+
+.cb-cursor-text {
+  position: absolute;
+  top: -18px;
+  left: -18px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 20px;
+  text-align: center;
+  letter-spacing: -0.01em;
+  opacity: 0;
+  transform: scale(0) rotate(10deg);
+  transition: opacity 0.4s, transform 0.3s;
+  color: white;
+}
+
+@supports (mix-blend-mode: exclusion) {
+
+  .cb-cursor.-exclusion,
+  .cb-cursor.-opaque {
+    mix-blend-mode: exclusion;
+  }
+
+  .cb-cursor.-exclusion:before,
+  .cb-cursor.-opaque:before {
+    background: white;
+  }
+}
+
+.cb-cursor.-visible:before {
+  transform: scale(0.24);
+}
+
+.cb-cursor.-visible.-active:before {
+  transform: scale(0.3);
+  transition-duration: 0.2s;
+}
+
+.cb-cursor.all-element:before {
+  transform: scale(1.6);
+  opacity: 0.25;
+  transition-duration: 0.2s;
+}
+
+.cb-cursor.-text:before {
+  background: var(--cc-primary);
+  opacity: 0.95;
+  transform: scale(2.2);
+}
+
+.cb-cursor.-text .cb-cursor-text {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ==========================================================================
+   LIGHT MODE OVERRIDES ([data-theme="light"])
+   ========================================================================== */
+[data-theme="light"] body {
+  background-color: #F8F9FC !important;
+  color: #4A5568 !important;
+}
+
+[data-theme="light"] h1,
+[data-theme="light"] h2,
+[data-theme="light"] h3,
+[data-theme="light"] h4,
+[data-theme="light"] h5,
+[data-theme="light"] h6 {
+  color: #111827 !important;
+}
+
+[data-theme="light"] .header.sticky-active.fixed {
+  background-color: rgba(255, 255, 255, 0.94) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08) !important;
+}
+
+[data-theme="light"] .logo-dark {
+  display: block !important;
+}
+
+[data-theme="light"] .logo-light {
+  display: none !important;
+}
+
+[data-theme="light"] .brand-text {
+  color: var(--cc-logo-text) !important;
+}
+
+[data-theme="light"] .header-menu-wrap ul li a {
+  color: #2D3748 !important;
+}
+
+[data-theme="light"] .header-menu-wrap ul li a.active-header-link {
+  color: var(--cc-primary) !important;
+}
+
+[data-theme="light"] .service-box,
+[data-theme="light"] .cs-item,
+[data-theme="light"] .job-card,
+[data-theme="light"] .counter-item {
+  background-color: #ffffff !important;
+  border-color: #E2E8F0 !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="light"] .cs-content h3,
+[data-theme="light"] .service-box h3,
+[data-theme="light"] .job-card h3 {
+  color: #111827 !important;
+}
+
+[data-theme="light"] .hero-section {
+  background-image: radial-gradient(circle at 50% 20%, var(--cc-primary-glow) 0%, rgba(248, 249, 252, 0) 70%) !important;
+}
+
+[data-theme="light"] .hero-section h1 {
+  color: #111827 !important;
+}
+
+[data-theme="light"] .sponsor-section,
+[data-theme="light"] .about-preview-section,
+[data-theme="light"] .process-section,
+[data-theme="light"] .testimonials-section,
+[data-theme="light"] .cta-banner-section {
+  background-color: #F1F4F9 !important;
+}
+
+[data-theme="light"] .running-text {
+  background-color: #ffffff !important;
+  border-color: #E2E8F0 !important;
+}
+
+[data-theme="light"] .running-text span {
+  color: #111827 !important;
+}
+
+[data-theme="light"] .footer-section {
+  background-color: #0c101a !important;
+}
+
+/* ==========================================================================
+   DARK / LIGHT IMAGE DISPLAY RULES
+   ========================================================================== */
+.dark-img {
+  display: block;
+}
+
+.light-img {
+  display: none;
+}
+
+[data-theme="light"] .dark-img {
+  display: none !important;
+}
+
+[data-theme="light"] .light-img {
+  display: block !important;
+}
+
+/* ==========================================================================
+   REVEAL & HERO ANIMATION STYLES
+   ========================================================================== */
+.reveal {
+  visibility: hidden;
+  position: relative;
+  overflow: hidden;
+}
+
+.reveal img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  transform-origin: left;
+}
+
+.anim-text {
+  overflow: hidden;
+  display: block;
+}
+
+.anim-text .char {
+  display: inline-block;
+  will-change: transform, opacity;
+}
