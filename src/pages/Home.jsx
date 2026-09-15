@@ -71,11 +71,11 @@ const PROJECTS_ACCORDION = [
 
 function ClientFeedbackSlider() {
   const totalItems = TESTIMONIALS.length;
-  // Start centered on Victoria Madison (totalItems + 2 = index 7)
+  // Start centered on middle slide
   const [slideIndex, setSlideIndex] = useState(totalItems + 2);
   const [isTransitioning, setIsTransitioning] = useState(true);
   const [isPaused, setIsPaused] = useState(false);
-  const [cardWidth, setCardWidth] = useState(360);
+  const [cardWidth, setCardWidth] = useState(420);
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState(0);
   const dragStartXRef = useRef(0);
@@ -83,7 +83,11 @@ function ClientFeedbackSlider() {
 
   useEffect(() => {
     const handleResize = () => {
-      setCardWidth(window.innerWidth < 768 ? 290 : 360);
+      const w = window.innerWidth;
+      if (w >= 1400) setCardWidth(420);
+      else if (w >= 992) setCardWidth(380);
+      else if (w >= 768) setCardWidth(340);
+      else setCardWidth(290);
     };
     handleResize();
     window.addEventListener('resize', handleResize);
@@ -96,7 +100,7 @@ function ClientFeedbackSlider() {
     const interval = setInterval(() => {
       setIsTransitioning(true);
       setSlideIndex((prev) => prev + 1);
-    }, 3400);
+    }, 3800);
 
     return () => clearInterval(interval);
   }, [isPaused, isDragging]);
@@ -205,15 +209,18 @@ function ClientFeedbackSlider() {
         {allSlides.map((item, idx) => (
           <div
             key={idx}
-            className="client-feedback-card"
+            className="testi-item text-center client-feedback-card"
             style={{ width: `${cardWidth}px`, flex: `0 0 ${cardWidth}px` }}
           >
-            <div className="client-feedback-thumb">
+            <div className="testi-thumb client-feedback-thumb">
               <img src={item.avatar} alt={item.author} draggable={false} />
             </div>
-            <h4 className="author-name">{item.author}</h4>
-            <span className="author-role">{item.role}</span>
-            <p className="author-quote">"{item.quote}"</p>
+            <div className="testi-content">
+              <h3 className="author">
+                {item.author} <span>{item.role}</span>
+              </h3>
+              <p>{item.quote}</p>
+            </div>
           </div>
         ))}
       </div>
@@ -243,7 +250,7 @@ function ClientFeedbackSlider() {
                 height: '8px',
                 borderRadius: '4px',
                 backgroundColor: isActive
-                  ? 'var(--cc-primary)'
+                  ? 'var(--cc-primary, #3F5AF3)'
                   : 'rgba(255, 255, 255, 0.22)',
                 border: 'none',
                 padding: 0,
@@ -627,7 +634,7 @@ export default function Home() {
         style={{
           position: 'relative',
           zIndex: 1,
-          marginBottom: '20px',
+          marginBottom: '0px',
           overflow: 'hidden'
         }}
       >
@@ -663,7 +670,7 @@ export default function Home() {
         style={{
           position: 'relative',
           zIndex: 2,
-          paddingTop: '20px',
+          paddingTop: '0px',
           paddingBottom: '80px'
         }}
       >
